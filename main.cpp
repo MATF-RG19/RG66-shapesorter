@@ -27,8 +27,8 @@ int main(int argc, char **argv)
     glutInitWindowPosition(100, 100);
     glutCreateWindow("ShapeSorter");
 
-	set_callbacks();
-	init();
+    set_callbacks();
+    init();
 
 
     glutMainLoop();
@@ -49,41 +49,41 @@ static void on_display(void)
             0, 1, 0
         );
 
-	coordinate_axes();
+    coordinate_axes();
 
     glutSwapBuffers();
 }
 
 static void on_keyboard(unsigned char key, int x, int y)
 {
-	switch (key) {
-		case 27:
-			std::exit(EXIT_SUCCESS);
-			break;
-		default:
-			break;	
-	}
+    switch (key) {
+        case 27:
+            std::exit(EXIT_SUCCESS);
+            break;
+        default:
+            break;  
+    }
 }
 
 static void on_reshape(int w, int h)
 {
-	glViewport(0, 0, w, h);
+    glViewport(0, 0, w, h);
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(
-			60,
-			w / (float) h,
-			1.5,
-			20);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(
+            60,
+            w / (float) h,
+            1.5,
+            20);
 
 }
 
 void set_callbacks()
 {
     glutDisplayFunc(on_display);
-	glutReshapeFunc(on_reshape);
-	glutKeyboardFunc(on_keyboard);
+    glutReshapeFunc(on_reshape);    
+    glutKeyboardFunc(on_keyboard);
 }
 
 void init()
@@ -93,6 +93,7 @@ void init()
 
 void coordinate_axes()
 {
+    
     glBegin(GL_LINES);
         glColor3f(1,0,0);
         glVertex3f(0,0,0);

@@ -5,7 +5,7 @@ project(ShapeSorter)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_executable(main main.cpp)
+add_executable(main main.cpp figures.cpp figures.h)
 
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)

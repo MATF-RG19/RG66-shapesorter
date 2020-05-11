@@ -28,3 +28,26 @@ void draw_main_cube()
     glPopMatrix();
 }
 
+void draw_falling_figure(int id)
+{
+    switch (id) {
+        case 0:
+            glColor3f(0, 1, 0);
+            glutWireCube(1);
+            break;
+        case 1:
+            glColor3f(1, 0, 0);
+            glutWireSphere(1, 10, 10);
+            break;
+        case 2:
+            glColor3f(0, 0, 1);
+            glutWireTeapot(1);
+            break;
+        case 3:
+            glColor3f(1, 0, 1);
+            glutWireIcosahedron();
+        default:
+            glColor3f(1, 0, 1);
+            glutWireCube(1);
+    }
+}

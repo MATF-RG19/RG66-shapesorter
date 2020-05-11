@@ -34,3 +34,6 @@
 # Dot files
 .*
 !.gitignore
+
+# build dir
+build/

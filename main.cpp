@@ -26,6 +26,7 @@ float x_angle, y_angle = 0.0;
 float temp = 0;
 double y_falling_direction = 0;
 int current_falling_figure = 0;
+int rotation_axis = 1;
 
 
 int spawn_axis = -1;
@@ -33,11 +34,11 @@ float vx = 0;
 float vy = 0;
 
 
-static void on_display(void);
-static void on_keyboard(unsigned char key, int x, int y);
-static void on_reshape(int w, int h);
-static void on_timer(int value);
-static void on_timer1(int value);
+void on_display(void);
+void on_keyboard(unsigned char key, int x, int y);
+void on_reshape(int w, int h);
+void on_timer(int value);
+void on_timer1(int value);
 
 
 void set_callbacks();
@@ -45,10 +46,6 @@ void init();
 void generate_spawn_axis();
 
 
-void coordinate_axes();
-void draw_main_cube(float x_angle, float y_angle);
-
-void update_rotation_angle(float& alpha);
 
 
 int main(int argc, char **argv)
@@ -70,14 +67,14 @@ int main(int argc, char **argv)
 }
 
 
-static void on_display(void)
+void on_display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     
     glLoadIdentity();
     gluLookAt(
-            15, 15, 15,
+            10, 10, 10,
             0, 0, 0,
             0, 1, 0
         );
@@ -110,23 +107,16 @@ static void on_display(void)
     glPopMatrix();
 
 
-
-    // get top side
-    // check for collison
-
     glPushMatrix(); 
-        glRotatef(current_rotation.x, 1, 0, 0);
-        glRotatef(current_rotation.y, 0, 1, 0);
+        glRotatef(current_rotation.x, 0, 0, 1);
         draw_main_cube();
     glPopMatrix();
  
 
-
-
     glutSwapBuffers();
 }
 
-static void on_keyboard(unsigned char key, int x, int y)
+void on_keyboard(unsigned char key, int x, int y)
 {
     switch (key) {
         case 27:
@@ -135,15 +125,15 @@ static void on_keyboard(unsigned char key, int x, int y)
         case 'd':
         case 'D':
             if (!current_rotation.rotating) {
-                current_rotation.current_rotation_axis = Y_AXIS;
+                rotation_axis = -1;
                 glutTimerFunc(20, on_timer, 0);
                 current_rotation.rotating = true;
             }
             break;
-        case 's':
-        case 'S':
+        case 'a':
+        case 'A':
             if (!current_rotation.rotating) {
-                current_rotation.current_rotation_axis = X_AXIS;
+                rotation_axis = 1;
                 glutTimerFunc(20, on_timer, 0);
                 current_rotation.rotating = true;
             }
@@ -166,7 +156,7 @@ static void on_keyboard(unsigned char key, int x, int y)
     }
 }
 
-static void on_reshape(int w, int h)
+void on_reshape(int w, int h)
 {
     glViewport(0, 0, w, h);
 
@@ -194,17 +184,15 @@ void init()
     glEnable(GL_DEPTH_TEST);
     glLineWidth(2);
 
-    current_rotation.current_rotation_axis = X_AXIS;
     current_rotation.rotating = false;
     current_rotation.x = 0;
-    current_rotation.y = 0;
 
     std::srand(std::time(nullptr));
 
 }
 
 
-static void on_timer1(int value)
+void on_timer1(int value)
 {
     if  (value != 0)
         return;
@@ -223,7 +211,7 @@ static void on_timer1(int value)
 }
 
 
-static void on_timer(int value)
+void on_timer(int value)
 {
     if (value != 0)
         return;
@@ -233,22 +221,23 @@ static void on_timer(int value)
         temp = 0;
     } else {
         temp += 10;
-        switch (current_rotation.current_rotation_axis)
+        if (current_rotation.x >= 360 || current_rotation.x <= -360)
+            current_rotation.x = 0;
+
+        switch (rotation_axis)
         {
-        case X_AXIS:
-            if (current_rotation.x >= 360)
-                current_rotation.x = 0;
-            current_rotation.x += 10;
-            break;
-        case Y_AXIS:
-            if (current_rotation.y >= 360)
-                current_rotation.y = 0;
-            current_rotation.y += 10;
-            break;
-        default:
-            break;
+            // TODO rename 1 -> POSITIVE_Z_AXIS, -1 -> NEGATIVE_Z_AXIS 
+            case 1:
+                current_rotation.x += 10;
+                break;
+            case -1:
+                current_rotation.x -= 10;
+                break;
+            default:
+                break;
         }
     }
+
     
     glutPostRedisplay();
 

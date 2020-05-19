@@ -10,19 +10,12 @@
 #include <ctime>
 
 
-
-#define X_AXIS 0
-#define Y_AXIS 1
-
-
 struct rot_state {
     bool rotating;
-    float x, y;
-    int current_rotation_axis;
+    float x;
 } current_rotation;
 
 bool animation_ongoing = false;
-float x_angle, y_angle = 0.0;
 float temp = 0;
 double y_falling_direction = 0;
 int current_falling_figure = 0;
@@ -30,8 +23,8 @@ int rotation_axis = 1;
 
 
 int spawn_axis = -1;
-float vx = 0;
-float vy = 0;
+float tx = 0;
+float ty = 0;
 
 
 void on_display(void);
@@ -87,26 +80,23 @@ void on_display(void)
         {
             if (spawn_axis == 0) // y axis
             {
-                vx = 0;
-                vy = 10 - y_falling_direction;
+                tx = 0;
+                ty = 10 - y_falling_direction;
             } else if (spawn_axis == 1) // x axis
             {
-                vx = 10 - y_falling_direction;
-                vy = 0;
+                tx = 10 - y_falling_direction;
+                ty = 0;
             }
-            glTranslatef(vx, vy, 0);
+            glTranslatef(tx, ty, 0);
             draw_falling_figure(current_falling_figure);
         } 
 //        else {
 //          #TODO handle collision 
-//          at this moment, figure is in collision with main cube
-//          need to check which side of main cube is facing our falling figure
-//          If they 'match' (cube and square) 
-//          then just continue; else end the game
 //        }
     glPopMatrix();
 
 
+    // drawing main cube
     glPushMatrix(); 
         glRotatef(current_rotation.x, 0, 0, 1);
         draw_main_cube();
@@ -180,7 +170,7 @@ void set_callbacks()
 
 void init()
 {
-    glClearColor(0.75, 0.75, 0.75, 0);
+    glClearColor(0.5, 0.5, 0.5, 0);
     glEnable(GL_DEPTH_TEST);
     glLineWidth(2);
 

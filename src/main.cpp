@@ -8,6 +8,22 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <vector>
+
+/*! \enum cube side
+ *
+ *  enumaration of main cube sides 
+ */
+enum Cube_side { blue_square, triangle, green_square, circle};
+
+
+std::vector<Cube_side> cube_sides { Cube_side::blue_square, 
+    Cube_side::triangle, 
+    Cube_side::green_square, 
+    Cube_side::circle };
+
+// vector iterator, points on top side of cube
+auto iter = cube_sides.cbegin();
 
 
 struct rot_state {
@@ -39,6 +55,9 @@ void init();
 void generate_spawn_axis();
 void set_translation_params();
 
+
+void update_cube_side_iterator(unsigned char pressedKey);
+void check_collision();
 
 
 
@@ -84,18 +103,18 @@ void on_display(void)
             set_translation_params();
             glTranslatef(tx, ty, 0);
             draw_falling_figure(current_falling_figure);
-        } 
-        // object is in coordinate centre, need to check which side of main cube is facing it
-//        else {
-//          #TODO handle collision 
-//        }
+        } else 
+        {
+            // object is in coordinate centre, need to check which side of main cube is facing it
+            check_collision();
+        }
     glPopMatrix();
 
 
     // drawing main cube
     glPushMatrix(); 
         glRotatef(current_rotation.x, 0, 0, 1);
-        draw_main_cube();
+        draw_main_cube(2);
     glPopMatrix();
  
     glutSwapBuffers();
@@ -113,6 +132,7 @@ void on_keyboard(unsigned char key, int x, int y)
                 rotation_axis = -1;
                 glutTimerFunc(20, on_timer, 0);
                 current_rotation.rotating = true;
+                update_cube_side_iterator('d');
             }
             break;
         case 'a':
@@ -121,6 +141,7 @@ void on_keyboard(unsigned char key, int x, int y)
                 rotation_axis = 1;
                 glutTimerFunc(20, on_timer, 0);
                 current_rotation.rotating = true;
+                update_cube_side_iterator('a');
             }
             break;
         case 'g':
@@ -174,15 +195,14 @@ void init()
 
     std::srand(std::time(nullptr));
 
-    glEnable(GL_COLOR_MATERIAL);
-
-    glShadeModel(GL_SMOOTH);
+    //glEnable(GL_COLOR_MATERIAL);
+    //glShadeModel(GL_SMOOTH);
 
     // setup default white light at light_position
     GLfloat light_position[] = { 10, 10, 10, 0 };
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    //glEnable(GL_LIGHTING);
+    //glEnable(GL_LIGHT0);
+    //glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 }
 
 
@@ -252,5 +272,44 @@ void set_translation_params()
     {
         tx = 10 - falling_figure_position;
         ty = 0;
+    }
+}
+
+void update_cube_side_iterator(unsigned char pressedKey)
+{
+    switch (pressedKey) {
+        case 'd':
+            ++iter;
+            if (iter == cube_sides.cend())
+                iter = cube_sides.cbegin();
+            break;
+        case 'a':
+            if (iter == cube_sides.cbegin())
+                iter = cube_sides.cend() - 1;
+            else 
+                --iter;
+        default:
+            break;
+            
+    }
+}
+
+void check_collision()
+{
+    auto next = iter + 1;
+    switch (spawn_axis) {
+        case 0: // y axis
+            if (current_falling_figure == 0 && *iter == Cube_side::green_square)
+               std::exit(EXIT_SUCCESS); 
+            break;
+        case 1: // x axis
+            if (next == cube_sides.cend())
+                next = cube_sides.cbegin();
+
+            if (current_falling_figure == 0 && *next == Cube_side::green_square)
+                std::exit(EXIT_SUCCESS); 
+            break;
+        default:
+            break;
     }
 }

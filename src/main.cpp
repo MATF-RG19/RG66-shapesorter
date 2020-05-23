@@ -17,7 +17,7 @@ struct rot_state {
 
 bool animation_ongoing = false;
 float temp = 0;
-double y_falling_direction = 0;
+double falling_figure_position = 0;
 int current_falling_figure = 0;
 int rotation_axis = 1;
 
@@ -37,6 +37,7 @@ void on_timer1(int value);
 void set_callbacks();
 void init();
 void generate_spawn_axis();
+void set_translation_params();
 
 
 
@@ -53,7 +54,6 @@ int main(int argc, char **argv)
     set_callbacks();
     init();
 
-
     glutMainLoop();
 
     return 0;
@@ -62,8 +62,10 @@ int main(int argc, char **argv)
 
 void on_display(void)
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
     
     glLoadIdentity();
     gluLookAt(
@@ -76,20 +78,14 @@ void on_display(void)
 
     // draw falling object
     glPushMatrix();
-        if (y_falling_direction < 10) 
+        // if object is still falling, translate it on current spawn axis
+        if (falling_figure_position < 10) 
         {
-            if (spawn_axis == 0) // y axis
-            {
-                tx = 0;
-                ty = 10 - y_falling_direction;
-            } else if (spawn_axis == 1) // x axis
-            {
-                tx = 10 - y_falling_direction;
-                ty = 0;
-            }
+            set_translation_params();
             glTranslatef(tx, ty, 0);
             draw_falling_figure(current_falling_figure);
         } 
+        // object is in coordinate centre, need to check which side of main cube is facing it
 //        else {
 //          #TODO handle collision 
 //        }
@@ -102,7 +98,6 @@ void on_display(void)
         draw_main_cube();
     glPopMatrix();
  
-
     glutSwapBuffers();
 }
 
@@ -154,9 +149,9 @@ void on_reshape(int w, int h)
     glLoadIdentity();
     gluPerspective(
             60,
-            w / (float) h,
-            1.5,
-            30);
+            (float) w / h,
+            0.01f,
+            100.0f);
     glMatrixMode(GL_MODELVIEW);
 
 }
@@ -179,6 +174,15 @@ void init()
 
     std::srand(std::time(nullptr));
 
+    glEnable(GL_COLOR_MATERIAL);
+
+    glShadeModel(GL_SMOOTH);
+
+    // setup default white light at light_position
+    GLfloat light_position[] = { 10, 10, 10, 0 };
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 }
 
 
@@ -187,13 +191,13 @@ void on_timer1(int value)
     if  (value != 0)
         return;
 
-    if (y_falling_direction >= 10) {
-        y_falling_direction = 0;
+    if (falling_figure_position >= 10) {
+        falling_figure_position = 0;
         current_falling_figure  = std::rand() % 4;
         generate_spawn_axis();
     }
 
-    y_falling_direction += 0.05;
+    falling_figure_position += 0.05;
     glutPostRedisplay();
 
     if (animation_ongoing)
@@ -237,4 +241,16 @@ void on_timer(int value)
 void generate_spawn_axis()
 {
     spawn_axis = std::rand() % 2;
+}
+void set_translation_params()
+{
+    if (spawn_axis == 0) // y axis
+    {
+        tx = 0;
+        ty = 10 - falling_figure_position;
+    } else if (spawn_axis == 1) // x axis
+    {
+        tx = 10 - falling_figure_position;
+        ty = 0;
+    }
 }

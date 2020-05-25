@@ -23,7 +23,7 @@ void on_display(void)
         );
 
     draw_background_figures();
-    coordinate_axes(10);
+    //coordinate_axes(10);
 
     // draw falling object
     glPushMatrix();

@@ -14,7 +14,7 @@
  *
  *  enumaration of main cube sides 
  */
-enum Cube_side { blue_square, triangle, green_square, circle};
+enum Cube_side { blue_square = 0, triangle = 1, green_square = 2, circle = 3};
 
 
 std::vector<Cube_side> cube_sides { Cube_side::blue_square, 
@@ -88,11 +88,12 @@ void on_display(void)
     
     glLoadIdentity();
     gluLookAt(
-            10, 10, 10,
+            15, 10, 15,
             0, 0, 0,
             0, 1, 0
         );
 
+    draw_background_figures();
     coordinate_axes(10);
 
     // draw falling object
@@ -114,9 +115,11 @@ void on_display(void)
     // drawing main cube
     glPushMatrix(); 
         glRotatef(current_rotation.x, 0, 0, 1);
-        draw_main_cube(2);
+        draw_main_cube(3);
     glPopMatrix();
- 
+
+    
+     
     glutSwapBuffers();
 }
 
@@ -278,12 +281,12 @@ void set_translation_params()
 void update_cube_side_iterator(unsigned char pressedKey)
 {
     switch (pressedKey) {
-        case 'd':
+        case 'a':
             ++iter;
             if (iter == cube_sides.cend())
                 iter = cube_sides.cbegin();
             break;
-        case 'a':
+        case 'd':
             if (iter == cube_sides.cbegin())
                 iter = cube_sides.cend() - 1;
             else 
@@ -299,14 +302,14 @@ void check_collision()
     auto next = iter + 1;
     switch (spawn_axis) {
         case 0: // y axis
-            if (current_falling_figure == 0 && *iter == Cube_side::green_square)
+            if (current_falling_figure == *iter)
                std::exit(EXIT_SUCCESS); 
             break;
         case 1: // x axis
             if (next == cube_sides.cend())
                 next = cube_sides.cbegin();
 
-            if (current_falling_figure == 0 && *next == Cube_side::green_square)
+            if (current_falling_figure == *next)
                 std::exit(EXIT_SUCCESS); 
             break;
         default:

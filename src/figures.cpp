@@ -77,25 +77,67 @@ void draw_falling_figure(int id)
 {
     switch (id) {
         case 0:
+            glColor3f(0, 0, 1);
+            glutWireCube(1);
+            break;
+        case 1:
+            glPushMatrix();
+                glColor3f(1, 0, 0);
+                glRotatef(-90, 1, 0, 0);
+                glutWireCone(1, 2, 30, 30);
+            glPopMatrix();
+            break;
+        case 2:
             glColor3f(0, 1, 0);
             glutSolidCube(1);
             break;
-        case 1:
-            glColor3f(1, 0, 0);
-            glutSolidSphere(1, 10, 10);
-            break;
-        case 2:
-            glColor3f(0, 0, 1);
-            //glutWireTeapot(1);
-            glutSolidTeapot(1);
-            break;
         case 3:
-            glColor3f(1, 0, 1);
-            //glutWireIcosahedron();
-            glutSolidIcosahedron();
+            glColor3f(1, 0.5, 0);
+            glutWireSphere(1, 10, 10);
+            //glutSolidSphere(1, 10, 10);
+            break;
         default:
-            glColor3f(1, 0, 1);
-            //glutWireCube(1);
-            glutSolidCube(1);
+            break;
+            //glColor3f(1, 0, 1);
+            ////glutWireCube(1);
+            //glutSolidCube(1);
     }
+}
+
+
+void draw_background_figures()
+{
+    glPushMatrix();
+        glColor3f(1, 0, 0);
+        glTranslatef(-5, 5, 7);
+        glutWireSphere(1, 30, 30);
+    glPopMatrix();
+
+
+    glPushMatrix();
+        glColor3f(0, 1, 0);
+        glTranslatef(5, 3, -5);
+        glRotatef(45, 0, 0, 1);
+        glutWireTorus(0.5, 2, 30, 30);
+    glPopMatrix();
+
+
+    glPushMatrix();
+        glColor3f(0, 0, 1);
+        glTranslatef(5, -3, 3);
+        glutWireOctahedron();
+    glPopMatrix();
+
+
+    glPushMatrix();
+        glColor3f(1, 0.5, 0);
+        glTranslatef(0, 0, 10);
+        glutWireTeapot(1);
+    glPopMatrix();
+
+    glPushMatrix();
+        glColor3f(0, 1, 1);
+        glTranslatef(-6, 6, -5);
+        glutWireCone(1, 2, 30, 30);
+    glPopMatrix();
 }

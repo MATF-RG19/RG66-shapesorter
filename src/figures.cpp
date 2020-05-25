@@ -23,7 +23,7 @@ void draw_main_cube(float size)
 {
     glPushMatrix();
         glColor3f(0, 1, 1);
-        glutWireCube(size);
+        glutSolidCube(size * 0.95);
         //glutSolidCube(size);
         //coordinate_axes(1);
 
@@ -58,8 +58,8 @@ void draw_main_cube(float size)
         {
             glVertex3f(
                     -size / 2, 
-                    std::cos(2 * i * PI / 10) * 0.7,
-                    std::sin(2 * i * PI / 10) * 0.7
+                    std::cos(2 * i * PI / 10),
+                    std::sin(2 * i * PI / 10) 
                     );
         }
     glEnd();
@@ -80,13 +80,13 @@ void draw_falling_figure(int id)
     switch (id) {
         case 0:
             glColor3f(0, 0, 1);
-            glutWireCube(1);
+            glutSolidCube(1);
             break;
         case 1:
             glPushMatrix();
                 glColor3f(1, 0, 0);
                 glRotatef(-90, 1, 0, 0);
-                glutWireCone(1, 2, 30, 30);
+                glutSolidCone(0.5, 1.5, 30, 30);
             glPopMatrix();
             break;
         case 2:
@@ -95,7 +95,7 @@ void draw_falling_figure(int id)
             break;
         case 3:
             glColor3f(1, 0.5, 0);
-            glutWireSphere(1, 10, 10);
+            glutSolidSphere(1, 10, 10);
             //glutSolidSphere(1, 10, 10);
             break;
         default:
@@ -112,7 +112,7 @@ void draw_background_figures()
     glPushMatrix();
         glColor3f(1, 0, 0);
         glTranslatef(-5, 5, 7);
-        glutWireSphere(1, 30, 30);
+        glutSolidSphere(1, 30, 30);
     glPopMatrix();
 
 
@@ -120,14 +120,14 @@ void draw_background_figures()
         glColor3f(0, 1, 0);
         glTranslatef(5, 3, -5);
         glRotatef(45, 0, 0, 1);
-        glutWireTorus(0.5, 2, 30, 30);
+        glutSolidTorus(0.5, 2, 30, 30);
     glPopMatrix();
 
 
     glPushMatrix();
         glColor3f(0, 0, 1);
         glTranslatef(5, -3, 3);
-        glutWireOctahedron();
+        glutSolidOctahedron();
     glPopMatrix();
 
 

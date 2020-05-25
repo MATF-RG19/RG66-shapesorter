@@ -9,7 +9,13 @@ add_subdirectory(src)
 
 add_executable(shapeSorter 
     src/main.cpp 
-    src/figures.cpp)
+    src/figures.cpp
+    src/display.cpp
+    src/utils.cpp
+    src/keyboard.cpp
+    src/timers.cpp
+)
+    
 
 
 find_package(OpenGL REQUIRED)

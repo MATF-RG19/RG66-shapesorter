@@ -21,6 +21,15 @@ void coordinate_axes(int len)
 
 void draw_main_cube(float size)
 {
+    glPushMatrix();
+        glColor3f(0, 1, 1);
+        glutWireCube(size);
+        //glutSolidCube(size);
+        //coordinate_axes(1);
+
+    glPopMatrix();
+
+
     // draw square on top of the main cube
     glColor3f(0, 0, 1);
     glBegin(GL_POLYGON);
@@ -64,13 +73,6 @@ void draw_main_cube(float size)
     glEnd();
 
 
-    glPushMatrix();
-        glColor3f(0.9, 0.0, 0.2);
-        glutWireCube(size);
-        //glutSolidCube(2.0);
-        coordinate_axes(1);
-
-    glPopMatrix();
 }
 
 void draw_falling_figure(int id)
@@ -132,12 +134,15 @@ void draw_background_figures()
     glPushMatrix();
         glColor3f(1, 0.5, 0);
         glTranslatef(0, 0, 10);
-        glutWireTeapot(1);
+        glRotatef(-45, 0, 1, 0);
+        //glutWireTeapot(1);
+        glutSolidTeapot(1);
     glPopMatrix();
 
     glPushMatrix();
         glColor3f(0, 1, 1);
         glTranslatef(-6, 6, -5);
-        glutWireCone(1, 2, 30, 30);
+        glutSolidCone(1, 2, 30, 30);
+        //glutWireCone(1, 2, 30, 30);
     glPopMatrix();
 }

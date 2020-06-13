@@ -146,3 +146,19 @@ void draw_background_figures()
         //glutWireCone(1, 2, 30, 30);
     glPopMatrix();
 }
+
+void background(float w, float h)
+{
+    glColor3f(1, 0, 1);
+    glNormal3f(0, 0, 1);
+    glPushMatrix();
+        glTranslatef(-20, 0, -20);
+        glRotatef(45, 0, 1, 0);
+        glBegin(GL_QUADS);
+            glVertex3f(-w, -h, 0);
+            glVertex3f(w, -h, 0);
+            glVertex3f(w, h, 0);
+            glVertex3f(-w, h, 0);
+        glEnd();
+    glPopMatrix();
+}

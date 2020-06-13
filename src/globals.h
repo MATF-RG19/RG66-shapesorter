@@ -42,5 +42,9 @@ extern float tx;
 extern float ty;
 
 
+extern float g_width;
+extern float g_height;
+
+
 
 #endif /* ifndef SHAPESORTER_GLOBALS */

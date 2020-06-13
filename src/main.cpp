@@ -42,6 +42,9 @@ int spawn_axis = -1;
 float tx = 0;
 float ty = 0;
 
+float g_width = 500;
+float g_height = 500;
+
 // ############################################################################
 
 void init();
@@ -52,7 +55,7 @@ int main(int argc, char **argv)
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
-    glutInitWindowSize(500, 500);
+    glutInitWindowSize(g_width, g_height);
     glutInitWindowPosition(100, 100);
     glutCreateWindow("ShapeSorter");
 

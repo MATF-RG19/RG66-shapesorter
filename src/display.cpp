@@ -22,6 +22,8 @@ void on_display(void)
             0, 1, 0
         );
 
+    background(g_width, g_height);
+
     draw_background_figures();
     //coordinate_axes(10);
 
@@ -53,6 +55,9 @@ void on_display(void)
 void on_reshape(int w, int h)
 {
     glViewport(0, 0, w, h);
+
+    g_width = w;
+    g_height = h;
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();

@@ -2,6 +2,7 @@
 #define SHAPESORTER_GLOBALS 2
 
 #include <vector>
+#include <GL/glut.h>
 
 // enumaration of main cube sides for clarity
 // We are using vector iterator to keep pointer on side that's normal to positive Oy
@@ -45,6 +46,8 @@ extern float ty;
 extern float g_width;
 extern float g_height;
 
+
+extern GLuint names[1];
 
 
 #endif /* ifndef SHAPESORTER_GLOBALS */

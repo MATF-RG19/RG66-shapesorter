@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_subdirectory(src)
 
+add_library(images_vezbe src/image.c)
+
 add_executable(shapeSorter 
     src/main.cpp 
     src/figures.cpp
@@ -15,6 +17,7 @@ add_executable(shapeSorter
     src/keyboard.cpp
     src/timers.cpp
 )
+target_link_libraries(shapeSorter images_vezbe)
     
 
 

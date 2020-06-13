@@ -13,8 +13,16 @@
 #include "display.h"
 #include "keyboard.h"
 
+extern "C" {
+    #include "image.h"
+}
+
+
+
 // ############################################################################
 // initialization of global variables
+
+GLuint names[1];
 
 std::vector<Cube_side> cube_sides { 
     Cube_side::blue_square, 
@@ -72,10 +80,51 @@ int main(int argc, char **argv)
 
 void init()
 {
-    glClearColor(0.5, 0.5, 0.5, 0);
+
+
+    glClearColor(0, 0, 0, 0);
     glEnable(GL_DEPTH_TEST);
     glLineWidth(2);
 
+
+    // ############################################################################
+    // Kod preuzet sa vezbi
+
+    Image* image;
+    glEnable(GL_TEXTURE_2D);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    image = image_init(0, 0);
+    image_read(image, "../textures/wall.bmp");
+
+    glGenTextures(1, names);
+    glBindTexture(GL_TEXTURE_2D, names[0]);
+
+    glTexParameteri(GL_TEXTURE_2D,
+                    GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,
+                    GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+                 image->width, image->height, 0,
+                 GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+
+    /* Iskljucujemo aktivnu teksturu */
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    /* Unistava se objekat za citanje tekstura iz fajla. */
+    image_done(image);
+
+    // ############################################################################
+   
+    
+    
+    
+    
+    
+    
+    
     std::srand(std::time(nullptr));
     
     // let glColor3f define colors

@@ -1,6 +1,7 @@
 #include "figures.h"
 #include <GL/glut.h>
 #include <cmath>
+#include "globals.h"
 
 void coordinate_axes(int len)
 {
@@ -149,16 +150,29 @@ void draw_background_figures()
 
 void background(float w, float h)
 {
-    glColor3f(1, 0, 1);
-    glNormal3f(0, 0, 1);
+
+    glBindTexture(GL_TEXTURE_2D, names[0]);
+
     glPushMatrix();
-        glTranslatef(-20, 0, -20);
+        glTranslatef(-10, -10, -5);
         glRotatef(45, 0, 1, 0);
+
         glBegin(GL_QUADS);
+            glNormal3f(0, 0, 1);
+            glTexCoord2f(0, 0);
             glVertex3f(-w, -h, 0);
+
+            glTexCoord2f(w/2, 0);
             glVertex3f(w, -h, 0);
+
+            glTexCoord2f(w/2, h/2);
             glVertex3f(w, h, 0);
+
+            glTexCoord2f(0, h/2);
             glVertex3f(-w, h, 0);
         glEnd();
     glPopMatrix();
+
+
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
